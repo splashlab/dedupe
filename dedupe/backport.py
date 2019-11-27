@@ -5,6 +5,7 @@ import warnings
 import platform
 import logging
 import sys
+import os
 
 from future.utils import viewitems
 
@@ -29,6 +30,11 @@ elif platform.system() == 'Windows':
     logger.warning(
         "Dedupe does not currently support multiprocessing on Windows")
     MULTIPROCESSING = False
+elif os.environ.get("AWS_EXECUTION_ENV") is not None:
+    logger.warning(
+        "Dedupe does not currently support multiprocessing on AWS Lambdas")
+    MULTIPROCESSING = False
+
 
 if MULTIPROCESSING:
     from multiprocessing import Process, Pool, Queue
